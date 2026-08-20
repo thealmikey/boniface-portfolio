@@ -225,7 +225,6 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function App() {
   const [loaded, setLoaded] = React.useState(false)
   const [scrolled, setScrolled] = React.useState(false)
-  const [heroVisible, setHeroVisible] = React.useState(true)
 
   React.useEffect(() => {
     const timer = setTimeout(() => setLoaded(true), 50)
@@ -233,19 +232,10 @@ function App() {
   }, [])
 
   React.useEffect(() => {
-    const handleScroll = () => {
-      const y = window.scrollY
-      setScrolled(y > 80)
-      setHeroVisible(y < 300)
-    }
+    const handleScroll = () => setScrolled(window.scrollY > 80)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  const headshotSize = heroVisible ? 140 : 44
-  const headshotBorder = heroVisible ? '4px solid var(--color-accent)' : '2px solid var(--color-dark)'
-  const headshotOpacity = heroVisible ? 1 : 0
-  const navbarOpacity = heroVisible ? 0 : 1
 
   return (
     <>
@@ -267,8 +257,6 @@ function App() {
           maxWidth: '960px',
           margin: '0 auto',
           width: '100%',
-          opacity: navbarOpacity,
-          pointerEvents: navbarOpacity ? 'auto' : 'none',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
@@ -304,37 +292,6 @@ function App() {
         </div>
       </nav>
 
-      <div
-        style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 50,
-          pointerEvents: 'none',
-          transition: 'opacity 0.5s ease',
-          opacity: headshotOpacity,
-        }}
-      >
-        <div
-          style={{
-            width: `${headshotSize}px`,
-            height: `${headshotSize}px`,
-            borderRadius: '50%',
-            border: headshotBorder,
-            overflow: 'hidden',
-            boxShadow: '0 24px 48px -12px rgba(28, 25, 23, 0.35)',
-            transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-          }}
-        >
-          <img
-            src="/headshot.jpg"
-            alt="Boniface Mwangi"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-          />
-        </div>
-      </div>
-
       <main
         style={{
           opacity: loaded ? 1 : 0,
@@ -352,16 +309,33 @@ function App() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             textAlign: 'center',
             background: 'linear-gradient(135deg, #1c1917 0%, #292524 50%, #1c1917 100%)',
             color: '#ffffff',
             boxShadow: '0 24px 48px -12px rgba(28, 25, 23, 0.25)',
-            paddingTop: heroVisible ? '0' : 'var(--space-xl)',
-            transition: 'padding-top 0.4s ease',
+            paddingTop: 'var(--space-xl)',
           }}
         >
-          <div style={{ position: 'relative', zIndex: 2, padding: 'var(--space-xl) var(--space-lg)' }}>
+          <div
+            style={{
+              width: '140px',
+              height: '140px',
+              borderRadius: '50%',
+              border: '4px solid var(--color-accent)',
+              overflow: 'hidden',
+              marginBottom: 'var(--space-md)',
+              boxShadow: '0 24px 48px -12px rgba(28, 25, 23, 0.35)',
+              flexShrink: 0,
+            }}
+          >
+            <img
+              src="/headshot.jpg"
+              alt="Boniface Mwangi"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
+          </div>
+          <div style={{ position: 'relative', zIndex: 2, padding: '0 var(--space-lg) var(--space-xl)' }}>
             <h1
               style={{
                 fontFamily: "'Playfair Display', Georgia, serif",
