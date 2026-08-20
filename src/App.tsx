@@ -84,6 +84,9 @@ const cv = {
       ],
     },
   ],
+  hobbies: ['Playing football', 'Travelling', 'Outdoor adventures', 'Boating & water sports', 'Exploring new cultures'],
+  philosophy:
+    'Life is a continuous journey of learning and discovery. Every day offers a chance to grow, adapt, and embrace new challenges — whether on a construction site, behind the wheel, or out on the water. I believe in balancing hard work with a deep appreciation for the outdoors, family, and the diverse cultures the world has to offer.',
   referees: [
     {
       name: 'Charles Gachanja',
@@ -141,6 +144,65 @@ const styles = {
     whiteSpace: 'nowrap',
     fontFamily: "'Inter', sans-serif",
   },
+}
+
+function Navbar({ scrolled }: { scrolled: boolean }) {
+  return (
+      <nav
+        style={{
+          position: 'fixed',
+          top: 0,
+          right: 0,
+          zIndex: 100,
+          background: scrolled ? 'rgba(255,255,255,0.85)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(12px) saturate(180%)' : 'none',
+          borderBottom: scrolled ? '1px solid var(--color-border)' : '1px solid transparent',
+          padding: scrolled ? 'var(--space-sm) var(--space-md)' : 'var(--space-md) var(--space-md)',
+          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          maxWidth: '960px',
+          margin: '0 auto',
+          width: '100%',
+          borderRadius: scrolled ? '0 0 var(--radius-lg) var(--radius-lg)' : '0',
+        }}
+      >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', textDecoration: 'none', color: 'inherit' }}>
+        <div
+          style={{
+            width: scrolled ? '40px' : '48px',
+            height: scrolled ? '40px' : '48px',
+            borderRadius: '50%',
+            border: `2px solid ${scrolled ? 'var(--color-dark)' : '#ffffff'}`,
+            overflow: 'hidden',
+            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+            flexShrink: 0,
+          }}
+        >
+          <img
+            src="/headshot.jpg"
+            alt="Boniface Mwangi"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        </div>
+        <span
+          style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontWeight: 700,
+            fontSize: '1.125rem',
+            color: scrolled ? 'var(--color-dark)' : '#ffffff',
+            transition: 'color 0.4s ease',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          {cv.name}
+        </span>
+      </div>
+    </nav>
+  )
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -220,291 +282,410 @@ function ExperienceCard({
 
 function App() {
   const [loaded, setLoaded] = React.useState(false)
+  const [scrolled, setScrolled] = React.useState(false)
 
   React.useEffect(() => {
     const timer = setTimeout(() => setLoaded(true), 50)
     return () => clearTimeout(timer)
   }, [])
 
+  React.useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 60)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
-    <main
-      style={{
-        opacity: loaded ? 1 : 0,
-        transform: loaded ? 'translateY(0)' : 'translateY(12px)',
-        transition: 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-      }}
-    >
-      <header
+    <>
+      <Navbar scrolled={scrolled} />
+      <main
         style={{
-          background: 'linear-gradient(135deg, #1c1917 0%, #292524 50%, #1c1917 100%)',
-          color: '#ffffff',
-          padding: 'var(--space-xl) var(--space-lg)',
-          borderRadius: 'var(--radius-lg)',
-          marginBottom: 'var(--space-xl)',
-          position: 'relative',
-          overflow: 'hidden',
-          boxShadow: '0 24px 48px -12px rgba(28, 25, 23, 0.25)',
+          opacity: loaded ? 1 : 0,
+          transform: loaded ? 'translateY(0)' : 'translateY(12px)',
+          transition: 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
       >
-        <div
+        <header
           style={{
-            position: 'absolute',
-            top: '-50%',
-            right: '-10%',
-            width: '400px',
-            height: '400px',
-            background: 'radial-gradient(circle, rgba(180, 83, 9, 0.15) 0%, transparent 70%)',
-            pointerEvents: 'none',
+            position: 'relative',
+            borderRadius: 'var(--radius-lg)',
+            marginBottom: 'var(--space-xl)',
+            overflow: 'hidden',
+            minHeight: '420px',
+            display: 'flex',
+            alignItems: 'flex-end',
+            boxShadow: '0 24px 48px -12px rgba(28, 25, 23, 0.25)',
           }}
-        />
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <h1
-            style={{
-              fontFamily: "'Playfair Display', Georgia, serif",
-              fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-              fontWeight: 800,
-              lineHeight: 1.05,
-              letterSpacing: '-0.03em',
-              marginBottom: 'var(--space-sm)',
-            }}
-          >
-            {cv.name}
-          </h1>
-          <p
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: 'clamp(1rem, 2.5vw, 1.375rem)',
-              fontWeight: 600,
-              opacity: 0.95,
-              marginBottom: 'var(--space-xs)',
-              letterSpacing: '-0.01em',
-            }}
-          >
-            {cv.title}
-          </p>
-          <p
-            style={{
-              fontSize: '0.9375rem',
-              opacity: 0.7,
-              marginBottom: 'var(--space-md)',
-              fontWeight: 400,
-              letterSpacing: '0.02em',
-            }}
-          >
-            {cv.subtitle}
-          </p>
+        >
           <div
             style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 'var(--space-md)',
-              fontSize: '0.875rem',
-              opacity: 0.85,
-              fontWeight: 500,
-              letterSpacing: '0.01em',
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: 'url(/driver.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              opacity: 0.25,
+              filter: 'saturate(0.8)',
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(to bottom, rgba(28,25,23,0.2) 0%, rgba(28,25,23,0.85) 100%)',
+            }}
+          />
+          <div
+            style={{
+              position: 'relative',
+              zIndex: 2,
+              padding: 'var(--space-xl) var(--space-lg)',
+              color: '#ffffff',
+              width: '100%',
             }}
           >
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-              <span style={{ opacity: 0.7 }}>✉</span> {cv.email}
-            </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-              <span style={{ opacity: 0.7 }}>☎</span> {cv.phone}
-            </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-              <span style={{ opacity: 0.7 }}>◎</span> {cv.nationality}
-            </span>
-          </div>
-        </div>
-      </header>
-
-      <Section title="Professional Summary">
-        <p
-          style={{
-            fontSize: '1.0625rem',
-            lineHeight: 1.75,
-            color: 'var(--color-text-secondary)',
-            fontWeight: 400,
-          }}
-        >
-          {cv.summary}
-        </p>
-      </Section>
-
-      <Section title="Skills & Certifications">
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: 'var(--space-md)',
-          }}
-        >
-          <div style={styles.card}>
-            <h3
+            <h1
               style={{
                 fontFamily: "'Playfair Display', Georgia, serif",
-                fontSize: '1.0625rem',
-                fontWeight: 700,
+                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                fontWeight: 800,
+                lineHeight: 1.05,
+                letterSpacing: '-0.03em',
                 marginBottom: 'var(--space-sm)',
-                color: 'var(--color-dark)',
+                textShadow: '0 2px 4px rgba(0,0,0,0.3)',
               }}
             >
-              Core Competencies
-            </h3>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {cv.skills.map((skill, i) => (
-                <span
-                  key={i}
-                  style={{
-                    fontSize: '0.8125rem',
-                    background: 'var(--color-dark)',
-                    color: '#ffffff',
-                    padding: '0.375rem 0.875rem',
-                    borderRadius: 'var(--radius)',
-                    fontWeight: 600,
-                    letterSpacing: '0.01em',
-                    transition: 'transform 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-1px)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div style={styles.card}>
-            <h3
+              {cv.name}
+            </h1>
+            <p
               style={{
-                fontFamily: "'Playfair Display', Georgia, serif",
-                fontSize: '1.0625rem',
-                fontWeight: 700,
-                marginBottom: 'var(--space-sm)',
-                color: 'var(--color-dark)',
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 'clamp(1rem, 2.5vw, 1.375rem)',
+                fontWeight: 600,
+                opacity: 0.95,
+                marginBottom: 'var(--space-xs)',
+                letterSpacing: '-0.01em',
+                textShadow: '0 1px 2px rgba(0,0,0,0.3)',
               }}
             >
-              Licenses & Certifications
-            </h3>
-            <ul
+              {cv.title}
+            </p>
+            <p
               style={{
-                paddingLeft: '1.25rem',
                 fontSize: '0.9375rem',
-                lineHeight: 1.75,
-                color: 'var(--color-text-secondary)',
+                opacity: 0.85,
+                marginBottom: 'var(--space-md)',
+                fontWeight: 400,
+                letterSpacing: '0.02em',
+                textShadow: '0 1px 2px rgba(0,0,0,0.3)',
               }}
             >
-              {cv.certifications.map((cert, i) => (
-                <li key={i} style={{ marginBottom: '0.5rem' }}>
-                  {cert}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </Section>
-
-      <Section title="Entrepreneurship & Leadership">
-        <div style={styles.card}>
-          <p style={{ fontSize: '0.9375rem', lineHeight: 1.7, color: 'var(--color-text-secondary)', marginBottom: 'var(--space-sm)' }}>
-            Experienced entrepreneur and business owner with a strong background in managing operations, teams, and client relationships. Combines hands-on technical expertise with business acumen to drive growth and efficiency.
-          </p>
-          <ul style={{ paddingLeft: '1.25rem', fontSize: '0.9375rem', lineHeight: 1.7, color: 'var(--color-text-secondary)' }}>
-            <li style={{ marginBottom: '0.375rem' }}>Proven ability to lead and manage international teams across diverse cultural environments</li>
-            <li style={{ marginBottom: '0.375rem' }}>Skilled in business development, operational planning, and strategic decision-making</li>
-            <li style={{ marginBottom: '0.375rem' }}>Demonstrated success in building and sustaining profitable business ventures</li>
-          </ul>
-        </div>
-      </Section>
-
-      <Section title="Professional Experience">
-        {cv.experience.map((job, i) => (
-          <ExperienceCard
-            key={i}
-            period={job.period}
-            title={job.role}
-            subtitle={job.company}
-            highlights={job.highlights}
-          />
-        ))}
-      </Section>
-
-      <Section title="Education">
-        {cv.education.map((edu, i) => (
-          <div key={i} style={styles.card}>
+              {cv.subtitle}
+            </p>
             <div
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                gap: 'var(--space-sm)',
+                gap: 'var(--space-md)',
+                fontSize: '0.875rem',
+                opacity: 0.9,
+                fontWeight: 500,
+                letterSpacing: '0.01em',
               }}
             >
-              <div>
-                <div style={{ fontWeight: 700, fontSize: '1.0625rem', color: 'var(--color-dark)', lineHeight: 1.3 }}>
-                  {edu.institution}
-                </div>
-                <div style={{ fontSize: '0.9375rem', color: 'var(--color-text-secondary)', marginTop: '0.125rem', fontWeight: 500 }}>
-                  {edu.credential}
-                </div>
-              </div>
-              <span style={styles.periodBadge}>{edu.period}</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                <span style={{ opacity: 0.8 }}>✉</span> {cv.email}
+              </span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                <span style={{ opacity: 0.8 }}>☎</span> {cv.phone}
+              </span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                <span style={{ opacity: 0.8 }}>◎</span> {cv.nationality}
+              </span>
             </div>
           </div>
-        ))}
-      </Section>
+        </header>
 
-      <Section title="Referees">
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: 'var(--space-md)',
-          }}
-        >
-          {cv.referees.map((ref, i) => (
-            <div key={i} style={styles.card}>
-              <div style={{ fontWeight: 700, fontSize: '0.9375rem', color: 'var(--color-dark)' }}>{ref.name}</div>
-              <div style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', marginTop: '0.25rem', fontWeight: 500 }}>
-                {ref.title}
+        <Section title="Professional Summary">
+          <p
+            style={{
+              fontSize: '1.0625rem',
+              lineHeight: 1.75,
+              color: 'var(--color-text-secondary)',
+              fontWeight: 400,
+            }}
+          >
+            {cv.summary}
+          </p>
+        </Section>
+
+        <Section title="Skills & Certifications">
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: 'var(--space-md)',
+            }}
+          >
+            <div style={styles.card}>
+              <h3
+                style={{
+                  fontFamily: "'Playfair Display', Georgia, serif",
+                  fontSize: '1.0625rem',
+                  fontWeight: 700,
+                  marginBottom: 'var(--space-sm)',
+                  color: 'var(--color-dark)',
+                }}
+              >
+                Core Competencies
+              </h3>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                {cv.skills.map((skill, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      fontSize: '0.8125rem',
+                      background: 'var(--color-dark)',
+                      color: '#ffffff',
+                      padding: '0.375rem 0.875rem',
+                      borderRadius: 'var(--radius)',
+                      fontWeight: 600,
+                      letterSpacing: '0.01em',
+                      transition: 'transform 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-1px)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+                  >
+                    {skill}
+                  </span>
+                ))}
               </div>
-              <div style={{ fontSize: '0.875rem', color: 'var(--color-muted)', marginTop: '0.125rem' }}>
-                {ref.org}
-              </div>
-              {ref.phone && (
-                <div
+            </div>
+
+            <div style={styles.card}>
+              <h3
+                style={{
+                  fontFamily: "'Playfair Display', Georgia, serif",
+                  fontSize: '1.0625rem',
+                  fontWeight: 700,
+                  marginBottom: 'var(--space-sm)',
+                  color: 'var(--color-dark)',
+                }}
+              >
+                Licenses & Certifications
+              </h3>
+              <ul
+                style={{
+                  paddingLeft: '1.25rem',
+                  fontSize: '0.9375rem',
+                  lineHeight: 1.75,
+                  color: 'var(--color-text-secondary)',
+                }}
+              >
+                {cv.certifications.map((cert, i) => (
+                  <li key={i} style={{ marginBottom: '0.5rem' }}>
+                    {cert}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </Section>
+
+        <Section title="Entrepreneurship & Leadership">
+          <div style={styles.card}>
+            <p style={{ fontSize: '0.9375rem', lineHeight: 1.7, color: 'var(--color-text-secondary)', marginBottom: 'var(--space-sm)' }}>
+              Experienced entrepreneur and business owner with a strong background in managing operations, teams, and client relationships. Combines hands-on technical expertise with business acumen to drive growth and efficiency.
+            </p>
+            <ul style={{ paddingLeft: '1.25rem', fontSize: '0.9375rem', lineHeight: 1.7, color: 'var(--color-text-secondary)' }}>
+              <li style={{ marginBottom: '0.375rem' }}>Proven ability to lead and manage international teams across diverse cultural environments</li>
+              <li style={{ marginBottom: '0.375rem' }}>Skilled in business development, operational planning, and strategic decision-making</li>
+              <li style={{ marginBottom: '0.375rem' }}>Demonstrated success in building and sustaining profitable business ventures</li>
+            </ul>
+          </div>
+        </Section>
+
+        <Section title="Life & Outdoors">
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: 'var(--space-md)',
+            }}
+          >
+            <div style={{ ...styles.card, padding: 0, overflow: 'hidden' }}>
+              <div
+                style={{
+                  height: '220px',
+                  backgroundImage: 'url(/boat-adventure.jpg)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              />
+              <div style={{ padding: 'var(--space-md)' }}>
+                <h3
                   style={{
-                    fontSize: '0.8125rem',
-                    color: 'var(--color-accent)',
-                    marginTop: '0.5rem',
-                    fontWeight: 600,
-                    letterSpacing: '0.02em',
+                    fontFamily: "'Playfair Display', Georgia, serif",
+                    fontSize: '1.0625rem',
+                    fontWeight: 700,
+                    marginBottom: 'var(--space-sm)',
+                    color: 'var(--color-dark)',
                   }}
                 >
-                  {ref.phone}
+                  Adventure & The Outdoors
+                </h3>
+                <p style={{ fontSize: '0.9375rem', lineHeight: 1.7, color: 'var(--color-text-secondary)' }}>
+                  When not on site, Boniface is an avid outdoorsman who finds renewal in nature, water sports, and exploring new horizons — both literally and figuratively.
+                </p>
+              </div>
+            </div>
+
+            <div style={{ ...styles.card, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <h3
+                style={{
+                  fontFamily: "'Playfair Display', Georgia, serif",
+                  fontSize: '1.0625rem',
+                  fontWeight: 700,
+                  marginBottom: 'var(--space-sm)',
+                  color: 'var(--color-dark)',
+                }}
+              >
+                Hobbies & Interests
+              </h3>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                {cv.hobbies.map((hobby, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      fontSize: '0.8125rem',
+                      background: 'var(--color-accent-soft)',
+                      color: 'var(--color-accent)',
+                      padding: '0.375rem 0.875rem',
+                      borderRadius: 'var(--radius)',
+                      fontWeight: 600,
+                      letterSpacing: '0.01em',
+                    }}
+                  >
+                    {hobby}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Section>
+
+        <Section title="Personal Philosophy">
+          <div
+            style={{
+              ...styles.card,
+              background: 'linear-gradient(135deg, #1c1917 0%, #292524 100%)',
+              color: '#ffffff',
+              border: 'none',
+            }}
+          >
+            <p
+              style={{
+                fontSize: '1.0625rem',
+                lineHeight: 1.8,
+                fontStyle: 'italic',
+                opacity: 0.95,
+              }}
+            >
+              "{cv.philosophy}"
+            </p>
+          </div>
+        </Section>
+
+        <Section title="Professional Experience">
+          {cv.experience.map((job, i) => (
+            <ExperienceCard
+              key={i}
+              period={job.period}
+              title={job.role}
+              subtitle={job.company}
+              highlights={job.highlights}
+            />
+          ))}
+        </Section>
+
+        <Section title="Education">
+          {cv.education.map((edu, i) => (
+            <div key={i} style={styles.card}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  gap: 'var(--space-sm)',
+                }}
+              >
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: '1.0625rem', color: 'var(--color-dark)', lineHeight: 1.3 }}>
+                    {edu.institution}
+                  </div>
+                  <div style={{ fontSize: '0.9375rem', color: 'var(--color-text-secondary)', marginTop: '0.125rem', fontWeight: 500 }}>
+                    {edu.credential}
+                  </div>
                 </div>
-              )}
+                <span style={styles.periodBadge}>{edu.period}</span>
+              </div>
             </div>
           ))}
-        </div>
-      </Section>
+        </Section>
 
-      <footer
-        style={{
-          marginTop: 'var(--space-xl)',
-          paddingTop: 'var(--space-md)',
-          borderTop: '1px solid var(--color-border)',
-          fontSize: '0.8125rem',
-          color: 'var(--color-muted)',
-          textAlign: 'center',
-          letterSpacing: '0.05em',
-          textTransform: 'uppercase',
-          fontWeight: 600,
-        }}
-      >
-        Boniface Mwangi — Forklift & Plant Operator
-      </footer>
-    </main>
+        <Section title="Referees">
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              gap: 'var(--space-md)',
+            }}
+          >
+            {cv.referees.map((ref, i) => (
+              <div key={i} style={styles.card}>
+                <div style={{ fontWeight: 700, fontSize: '0.9375rem', color: 'var(--color-dark)' }}>{ref.name}</div>
+                <div style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', marginTop: '0.25rem', fontWeight: 500 }}>
+                  {ref.title}
+                </div>
+                <div style={{ fontSize: '0.875rem', color: 'var(--color-muted)', marginTop: '0.125rem' }}>
+                  {ref.org}
+                </div>
+                {ref.phone && (
+                  <div
+                    style={{
+                      fontSize: '0.8125rem',
+                      color: 'var(--color-accent)',
+                      marginTop: '0.5rem',
+                      fontWeight: 600,
+                      letterSpacing: '0.02em',
+                    }}
+                  >
+                    {ref.phone}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        <footer
+          style={{
+            marginTop: 'var(--space-xl)',
+            paddingTop: 'var(--space-md)',
+            borderTop: '1px solid var(--color-border)',
+            fontSize: '0.8125rem',
+            color: 'var(--color-muted)',
+            textAlign: 'center',
+            letterSpacing: '0.05em',
+            textTransform: 'uppercase',
+            fontWeight: 600,
+          }}
+        >
+          Boniface Mwangi — Forklift & Plant Operator
+        </footer>
+      </main>
+    </>
   )
 }
 

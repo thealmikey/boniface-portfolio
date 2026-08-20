@@ -34,13 +34,14 @@ html {
   background: var(--color-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
 body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  padding: var(--space-lg) var(--space-md);
+  padding: 0 var(--space-md);
   background: 
     radial-gradient(circle at 20% 50%, rgba(180, 83, 9, 0.03) 0%, transparent 50%),
     radial-gradient(circle at 80% 80%, rgba(28, 25, 23, 0.02) 0%, transparent 50%),
@@ -50,6 +51,7 @@ body {
 #root {
   width: 100%;
   max-width: var(--max-width);
+  padding-top: 80px;
 }
 
 @media (max-width: 640px) {
@@ -57,7 +59,10 @@ body {
     font-size: 15px;
   }
   body {
-    padding: var(--space-md) var(--space-sm);
+    padding: 0 var(--space-sm);
+  }
+  #root {
+    padding-top: 64px;
   }
 }
 
