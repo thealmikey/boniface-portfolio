@@ -9,13 +9,17 @@ const cv = {
   nationality: 'Kenyan',
   dob: '24 May 1986',
   summary:
-    'Highly skilled Forklift and Plant Operator with over 15 years of international experience in oil & gas, construction, and industrial manufacturing. Proven expertise in heavy equipment operation, preventive maintenance, and site safety compliance across Kenya, the UAE, and Nigeria. Adept at working with minimal supervision and delivering operational efficiency in fast-paced, high-stakes environments.',
+    'Highly skilled Forklift and Plant Operator with over 15 years of international experience in oil & gas, construction, and industrial manufacturing. Proven expertise in heavy equipment operation, preventive maintenance, and site safety compliance across Kenya, the UAE, and Nigeria. Adept at working with minimal supervision and delivering operational efficiency in fast-paced, high-stakes environments. Experienced team leader with international team management skills and a track record of entrepreneurship and business ownership.',
   skills: [
     'Forklift Operation (Heavy & Light)',
+    'Crane Operation',
     'Plant & Heavy Equipment Operation',
     'Preventive Maintenance',
     'Safety Compliance (OSHA-equivalent)',
     'Industrial Site Coordination',
+    'Team Leadership & Management',
+    'International Team Operations',
+    'Entrepreneurship & Business Ownership',
     'Heavy Commercial Driving',
     'Light Vehicle Operation',
     'Locomotive Engineering',
@@ -396,6 +400,19 @@ function App() {
               ))}
             </ul>
           </div>
+        </div>
+      </Section>
+
+      <Section title="Entrepreneurship & Leadership">
+        <div style={styles.card}>
+          <p style={{ fontSize: '0.9375rem', lineHeight: 1.7, color: 'var(--color-text-secondary)', marginBottom: 'var(--space-sm)' }}>
+            Experienced entrepreneur and business owner with a strong background in managing operations, teams, and client relationships. Combines hands-on technical expertise with business acumen to drive growth and efficiency.
+          </p>
+          <ul style={{ paddingLeft: '1.25rem', fontSize: '0.9375rem', lineHeight: 1.7, color: 'var(--color-text-secondary)' }}>
+            <li style={{ marginBottom: '0.375rem' }}>Proven ability to lead and manage international teams across diverse cultural environments</li>
+            <li style={{ marginBottom: '0.375rem' }}>Skilled in business development, operational planning, and strategic decision-making</li>
+            <li style={{ marginBottom: '0.375rem' }}>Demonstrated success in building and sustaining profitable business ventures</li>
+          </ul>
         </div>
       </Section>
 
