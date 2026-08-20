@@ -9,7 +9,7 @@ const cv = {
   nationality: 'Kenyan',
   dob: '24 May 1986',
   summary:
-    'Highly skilled Forklift and Plant Operator with over 15 years of international experience in oil & gas, construction, and industrial manufacturing. Proven expertise in heavy equipment operation, preventive maintenance, and site safety compliance across Kenya, the UAE, and Nigeria. Adept at working with minimal supervision and delivering operational efficiency in fast-paced, high-stakes environments. Experienced team leader with international team management skills and a track record of entrepreneurship and business ownership.',
+    'Forklift and Plant Operator with 15+ years of international experience across Kenya, the UAE, and Nigeria. Expert in heavy equipment operation, preventive maintenance, and site safety compliance in oil & gas, construction, and industrial manufacturing. Proven ability to deliver operational efficiency in fast-paced, high-stakes environments with minimal supervision. Experienced team leader and international manager with a track record of entrepreneurship and business ownership.',
   skills: [
     'Forklift Operation (Heavy & Light)',
     'Crane Operation',
@@ -405,6 +405,73 @@ function App() {
             </div>
           </div>
         </header>
+
+        <div
+          style={{
+            background: 'linear-gradient(135deg, #1c1917 0%, #292524 50%, #1c1917 100%)',
+            color: '#ffffff',
+            padding: 'var(--space-lg) var(--space-md)',
+            borderRadius: 'var(--radius-lg)',
+            marginBottom: 'var(--space-xl)',
+            textAlign: 'center',
+            boxShadow: '0 24px 48px -12px rgba(28, 25, 23, 0.25)',
+          }}
+        >
+          <p style={{ fontSize: '1.0625rem', lineHeight: 1.7, opacity: 0.95, maxWidth: '640px', margin: '0 auto var(--space-md)' }}>
+            Looking for a reliable heavy equipment operator or a collaborative partner? Let's connect and discuss how Boniface can bring value to your next project.
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'var(--space-sm)' }}>
+            <a
+              href={`mailto:${cv.email}`}
+              style={{
+                display: 'inline-block',
+                background: '#ffffff',
+                color: 'var(--color-dark)',
+                padding: '0.625rem 1.5rem',
+                borderRadius: 'var(--radius)',
+                fontWeight: 700,
+                fontSize: '0.9375rem',
+                textDecoration: 'none',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)'
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.2)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.boxShadow = 'none'
+              }}
+            >
+              Get in Touch
+            </a>
+            <a
+              href={`tel:${cv.phone.replace(/\s/g, '')}`}
+              style={{
+                display: 'inline-block',
+                background: 'transparent',
+                color: '#ffffff',
+                padding: '0.625rem 1.5rem',
+                borderRadius: 'var(--radius)',
+                fontWeight: 700,
+                fontSize: '0.9375rem',
+                textDecoration: 'none',
+                border: '2px solid rgba(255,255,255,0.3)',
+                transition: 'transform 0.2s ease, border-color 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)'
+                e.currentTarget.style.borderColor = '#ffffff'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'
+              }}
+            >
+              Call Now
+            </a>
+          </div>
+        </div>
 
         <Section title="Professional Summary">
           <p
