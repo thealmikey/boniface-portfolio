@@ -54,15 +54,18 @@ body {
   padding-top: 80px;
 }
 
-@media (max-width: 640px) {
-  html {
-    font-size: 15px;
+@media (max-width: 768px) {
+  .nav-links {
+    display: none !important;
   }
-  body {
-    padding: 0 var(--space-sm);
+  .hamburger {
+    display: flex !important;
   }
-  #root {
-    padding-top: 64px;
+}
+
+@media (min-width: 769px) {
+  .mobile-menu {
+    display: none !important;
   }
 }
 

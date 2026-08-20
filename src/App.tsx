@@ -109,9 +109,23 @@ const cv = {
   ],
 }
 
+const navLinks = [
+  { label: 'Experience', href: '#experience' },
+  { label: 'Summary', href: '#summary' },
+  { label: 'Skills', href: '#skills' },
+  { label: 'Leadership', href: '#leadership' },
+  { label: 'Life', href: '#life' },
+  { label: 'Philosophy', href: '#philosophy' },
+  { label: 'Education', href: '#education' },
+  { label: 'Languages', href: '#languages' },
+  { label: 'Referees', href: '#referees' },
+  { label: 'Contact', href: '#contact' },
+]
+
 const styles = {
   section: {
     marginBottom: 'var(--space-xl)',
+    scrollMarginTop: '80px',
   },
   sectionTitle: {
     fontFamily: "'Playfair Display', Georgia, serif",
@@ -145,6 +159,17 @@ const styles = {
     whiteSpace: 'nowrap',
     fontFamily: "'Inter', sans-serif",
   },
+}
+
+function Section({ title, id, children }: { title: string; id: string; children: React.ReactNode }) {
+  return (
+    <section id={id} style={styles.section}>
+      <h2 style={styles.sectionTitle}>{title}</h2>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+        {children}
+      </div>
+    </section>
+  )
 }
 
 function ExperienceCard({
@@ -211,20 +236,12 @@ function ExperienceCard({
   )
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section style={styles.section}>
-      <h2 style={styles.sectionTitle}>{title}</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-        {children}
-      </div>
-    </section>
-  )
-}
-
 function App() {
   const [loaded, setLoaded] = React.useState(false)
   const [scrolled, setScrolled] = React.useState(false)
+  const [menuOpen, setMenuOpen] = React.useState(false)
+  const [activeSection, setActiveSection] = React.useState('experience')
+  const [headshotProgress, setHeadshotProgress] = React.useState(0)
 
   React.useEffect(() => {
     const timer = setTimeout(() => setLoaded(true), 50)
@@ -232,10 +249,45 @@ function App() {
   }, [])
 
   React.useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 80)
+    const handleScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 60)
+      setMenuOpen(false)
+
+      const progress = Math.min(y / 320, 1)
+      setHeadshotProgress(progress)
+
+      const sections = ['experience', 'summary', 'skills', 'leadership', 'life', 'philosophy', 'education', 'languages', 'referees', 'contact']
+      let current = 'experience'
+      for (const id of sections) {
+        const el = document.getElementById(id)
+        if (el) {
+          const rect = el.getBoundingClientRect()
+          if (rect.top <= 160) {
+            current = id
+          }
+        }
+      }
+      setActiveSection(current)
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const scrollTo = (href: string) => {
+    const id = href.replace('#', '')
+    const el = document.getElementById(id)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' })
+    }
+    setMenuOpen(false)
+  }
+
+  const heroHeadshotScale = 1 - headshotProgress * 0.69
+  const heroHeadshotOpacity = 1 - Math.pow(headshotProgress, 1.8)
+  const navbarHeadshotOpacity = Math.pow(headshotProgress, 1.8)
 
   return (
     <>
@@ -251,44 +303,144 @@ function App() {
           borderBottom: scrolled ? '1px solid var(--color-border)' : '1px solid transparent',
           padding: 'var(--space-sm) var(--space-md)',
           transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          maxWidth: '960px',
-          margin: '0 auto',
-          width: '100%',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
+        <div
+          style={{
+            maxWidth: '960px',
+            margin: '0 auto',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', cursor: 'pointer' }} onClick={() => scrollTo('#experience')}>
+            <div
+              style={{
+                width: '44px',
+                height: '44px',
+                borderRadius: '50%',
+                border: '2px solid var(--color-dark)',
+                overflow: 'hidden',
+                flexShrink: 0,
+                opacity: navbarHeadshotOpacity,
+                transition: 'opacity 0.15s linear',
+              }}
+            >
+              <img
+                src="/headshot.jpg"
+                alt="Boniface Mwangi"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+            </div>
+            <span
+              style={{
+                fontFamily: "'Playfair Display', Georgia, serif",
+                fontWeight: 700,
+                fontSize: '1.125rem',
+                color: 'var(--color-dark)',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {cv.name}
+            </span>
+          </div>
+
           <div
             style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '50%',
-              border: '2px solid var(--color-dark)',
-              overflow: 'hidden',
-              flexShrink: 0,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-md)',
             }}
           >
-            <img
-              src="/headshot.jpg"
-              alt="Boniface Mwangi"
-              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-            />
+            <div
+              style={{
+                display: 'flex',
+                gap: 'var(--space-sm)',
+              }}
+              className="nav-links"
+            >
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={(e) => { e.preventDefault(); scrollTo(link.href) }}
+                  style={{
+                    fontSize: '0.8125rem',
+                    fontWeight: activeSection === link.href.replace('#', '') ? 700 : 500,
+                    color: activeSection === link.href.replace('#', '') ? 'var(--color-accent)' : 'var(--color-text-secondary)',
+                    textDecoration: 'none',
+                    transition: 'color 0.2s ease',
+                    letterSpacing: '0.01em',
+                  }}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              style={{
+                display: 'none',
+                flexDirection: 'column',
+                gap: '4px',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '4px',
+              }}
+              className="hamburger"
+            >
+              <span style={{ display: 'block', width: '20px', height: '2px', background: 'var(--color-dark)', transition: 'all 0.3s ease' }} />
+              <span style={{ display: 'block', width: '20px', height: '2px', background: 'var(--color-dark)', transition: 'all 0.3s ease' }} />
+              <span style={{ display: 'block', width: '20px', height: '2px', background: 'var(--color-dark)', transition: 'all 0.3s ease' }} />
+            </button>
           </div>
-          <span
+        </div>
+
+        <div
+          style={{
+            maxWidth: '960px',
+            margin: '0 auto',
+            width: '100%',
+            overflow: 'hidden',
+            maxHeight: menuOpen ? '400px' : '0',
+            opacity: menuOpen ? 1 : 0,
+            transition: 'max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+          }}
+          className="mobile-menu"
+        >
+          <div
             style={{
-              fontFamily: "'Playfair Display', Georgia, serif",
-              fontWeight: 700,
-              fontSize: '1.125rem',
-              color: 'var(--color-dark)',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--space-sm)',
+              paddingTop: 'var(--space-sm)',
+              paddingBottom: 'var(--space-sm)',
             }}
           >
-            {cv.name}
-          </span>
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={(e) => { e.preventDefault(); scrollTo(link.href) }}
+                style={{
+                  fontSize: '0.9375rem',
+                  fontWeight: activeSection === link.href.replace('#', '') ? 700 : 500,
+                  color: activeSection === link.href.replace('#', '') ? 'var(--color-accent)' : 'var(--color-text-secondary)',
+                  textDecoration: 'none',
+                  padding: '0.5rem 0',
+                  borderBottom: '1px solid var(--color-border)',
+                }}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
         </div>
       </nav>
 
@@ -297,6 +449,7 @@ function App() {
           opacity: loaded ? 1 : 0,
           transform: loaded ? 'translateY(0)' : 'translateY(12px)',
           transition: 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+          paddingTop: '80px',
         }}
       >
         <header
@@ -327,6 +480,9 @@ function App() {
               marginBottom: 'var(--space-md)',
               boxShadow: '0 24px 48px -12px rgba(28, 25, 23, 0.35)',
               flexShrink: 0,
+              transform: `scale(${heroHeadshotScale})`,
+              opacity: heroHeadshotOpacity,
+              transition: 'transform 0.1s linear, opacity 0.1s linear',
             }}
           >
             <img
@@ -399,7 +555,7 @@ function App() {
           </div>
         </header>
 
-        <Section title="Professional Experience">
+        <Section title="Professional Experience" id="experience">
           {cv.experience.map((job, i) => (
             <ExperienceCard
               key={i}
@@ -411,7 +567,7 @@ function App() {
           ))}
         </Section>
 
-        <Section title="Professional Summary">
+        <Section title="Professional Summary" id="summary">
           <p
             style={{
               fontSize: '1.0625rem',
@@ -424,7 +580,7 @@ function App() {
           </p>
         </Section>
 
-        <Section title="Skills & Certifications">
+        <Section title="Skills & Certifications" id="skills">
           <div
             style={{
               display: 'grid',
@@ -497,7 +653,7 @@ function App() {
           </div>
         </Section>
 
-        <Section title="Entrepreneurship & Leadership">
+        <Section title="Entrepreneurship & Leadership" id="leadership">
           <div style={styles.card}>
             <p style={{ fontSize: '0.9375rem', lineHeight: 1.7, color: 'var(--color-text-secondary)', marginBottom: 'var(--space-sm)' }}>
               Experienced entrepreneur and business owner with a strong background in managing operations, teams, and client relationships. Combines hands-on technical expertise with business acumen to drive growth and efficiency.
@@ -510,7 +666,7 @@ function App() {
           </div>
         </Section>
 
-        <Section title="Life & Outdoors">
+        <Section title="Life & Outdoors" id="life">
           <div
             style={{
               display: 'grid',
@@ -579,7 +735,7 @@ function App() {
           </div>
         </Section>
 
-        <Section title="Personal Philosophy">
+        <Section title="Personal Philosophy" id="philosophy">
           <div
             style={{
               ...styles.card,
@@ -601,7 +757,7 @@ function App() {
           </div>
         </Section>
 
-        <Section title="Education">
+        <Section title="Education" id="education">
           {cv.education.map((edu, i) => (
             <div key={i} style={styles.card}>
               <div
@@ -627,7 +783,7 @@ function App() {
           ))}
         </Section>
 
-        <Section title="Languages">
+        <Section title="Languages" id="languages">
           <div style={styles.card}>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
               {cv.languages.map((lang, i) => (
@@ -649,7 +805,7 @@ function App() {
           </div>
         </Section>
 
-        <Section title="Referees">
+        <Section title="Referees" id="referees">
           <div
             style={{
               display: 'grid',
@@ -685,6 +841,7 @@ function App() {
         </Section>
 
         <div
+          id="contact"
           style={{
             position: 'relative',
             borderRadius: 'var(--radius-lg)',
@@ -695,6 +852,7 @@ function App() {
             alignItems: 'center',
             justifyContent: 'center',
             boxShadow: '0 24px 48px -12px rgba(28, 25, 23, 0.25)',
+            scrollMarginTop: '80px',
           }}
         >
           <div
