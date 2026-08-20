@@ -8,6 +8,7 @@ const cv = {
   phone: '+254 714 157 912',
   nationality: 'Kenyan',
   dob: '24 May 1986',
+  languages: ['English', 'Kiswahili', 'Kikuyu', 'Arabic'],
   summary:
     'Forklift and Plant Operator with 15+ years of international experience across Kenya, the UAE, and Nigeria. Expert in heavy equipment operation, preventive maintenance, and site safety compliance in oil & gas, construction, and industrial manufacturing. Proven ability to deliver operational efficiency in fast-paced, high-stakes environments with minimal supervision. Experienced team leader and international manager with a track record of entrepreneurship and business ownership.',
   skills: [
@@ -146,76 +147,6 @@ const styles = {
   },
 }
 
-function Navbar({ scrolled }: { scrolled: boolean }) {
-  return (
-      <nav
-        style={{
-          position: 'fixed',
-          top: 0,
-          right: 0,
-          zIndex: 100,
-          background: scrolled ? 'rgba(255,255,255,0.85)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(12px) saturate(180%)' : 'none',
-          borderBottom: scrolled ? '1px solid var(--color-border)' : '1px solid transparent',
-          padding: scrolled ? 'var(--space-sm) var(--space-md)' : 'var(--space-md) var(--space-md)',
-          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          maxWidth: '960px',
-          margin: '0 auto',
-          width: '100%',
-          borderRadius: scrolled ? '0 0 var(--radius-lg) var(--radius-lg)' : '0',
-        }}
-      >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', textDecoration: 'none', color: 'inherit' }}>
-        <div
-          style={{
-            width: scrolled ? '40px' : '48px',
-            height: scrolled ? '40px' : '48px',
-            borderRadius: '50%',
-            border: `2px solid ${scrolled ? 'var(--color-dark)' : '#ffffff'}`,
-            overflow: 'hidden',
-            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-            flexShrink: 0,
-          }}
-        >
-          <img
-            src="/headshot.jpg"
-            alt="Boniface Mwangi"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-          />
-        </div>
-        <span
-          style={{
-            fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 700,
-            fontSize: '1.125rem',
-            color: scrolled ? 'var(--color-dark)' : '#ffffff',
-            transition: 'color 0.4s ease',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          {cv.name}
-        </span>
-      </div>
-    </nav>
-  )
-}
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section style={styles.section}>
-      <h2 style={styles.sectionTitle}>{title}</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-        {children}
-      </div>
-    </section>
-  )
-}
-
 function ExperienceCard({
   period,
   title,
@@ -280,9 +211,21 @@ function ExperienceCard({
   )
 }
 
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section style={styles.section}>
+      <h2 style={styles.sectionTitle}>{title}</h2>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+        {children}
+      </div>
+    </section>
+  )
+}
+
 function App() {
   const [loaded, setLoaded] = React.useState(false)
   const [scrolled, setScrolled] = React.useState(false)
+  const [heroVisible, setHeroVisible] = React.useState(true)
 
   React.useEffect(() => {
     const timer = setTimeout(() => setLoaded(true), 50)
@@ -290,14 +233,108 @@ function App() {
   }, [])
 
   React.useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 60)
+    const handleScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 80)
+      setHeroVisible(y < 300)
+    }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const headshotSize = heroVisible ? 140 : 44
+  const headshotBorder = heroVisible ? '4px solid var(--color-accent)' : '2px solid var(--color-dark)'
+  const headshotOpacity = heroVisible ? 1 : 0
+  const navbarOpacity = heroVisible ? 0 : 1
+
   return (
     <>
-      <Navbar scrolled={scrolled} />
+      <nav
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+          background: scrolled ? 'rgba(255,255,255,0.92)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(12px) saturate(180%)' : 'none',
+          borderBottom: scrolled ? '1px solid var(--color-border)' : '1px solid transparent',
+          padding: 'var(--space-sm) var(--space-md)',
+          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          maxWidth: '960px',
+          margin: '0 auto',
+          width: '100%',
+          opacity: navbarOpacity,
+          pointerEvents: navbarOpacity ? 'auto' : 'none',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
+          <div
+            style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: '50%',
+              border: '2px solid var(--color-dark)',
+              overflow: 'hidden',
+              flexShrink: 0,
+            }}
+          >
+            <img
+              src="/headshot.jpg"
+              alt="Boniface Mwangi"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
+          </div>
+          <span
+            style={{
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontWeight: 700,
+              fontSize: '1.125rem',
+              color: 'var(--color-dark)',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            {cv.name}
+          </span>
+        </div>
+      </nav>
+
+      <div
+        style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 50,
+          pointerEvents: 'none',
+          transition: 'opacity 0.5s ease',
+          opacity: headshotOpacity,
+        }}
+      >
+        <div
+          style={{
+            width: `${headshotSize}px`,
+            height: `${headshotSize}px`,
+            borderRadius: '50%',
+            border: headshotBorder,
+            overflow: 'hidden',
+            boxShadow: '0 24px 48px -12px rgba(28, 25, 23, 0.35)',
+            transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+          }}
+        >
+          <img
+            src="/headshot.jpg"
+            alt="Boniface Mwangi"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        </div>
+      </div>
+
       <main
         style={{
           opacity: loaded ? 1 : 0,
@@ -311,22 +348,20 @@ function App() {
             borderRadius: 'var(--radius-lg)',
             marginBottom: 'var(--space-xl)',
             overflow: 'hidden',
-            minHeight: '320px',
+            minHeight: '420px',
             display: 'flex',
-            alignItems: 'flex-end',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
             background: 'linear-gradient(135deg, #1c1917 0%, #292524 50%, #1c1917 100%)',
+            color: '#ffffff',
             boxShadow: '0 24px 48px -12px rgba(28, 25, 23, 0.25)',
+            paddingTop: heroVisible ? '0' : 'var(--space-xl)',
+            transition: 'padding-top 0.4s ease',
           }}
         >
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 2,
-              padding: 'var(--space-xl) var(--space-lg)',
-              color: '#ffffff',
-              width: '100%',
-            }}
-          >
+          <div style={{ position: 'relative', zIndex: 2, padding: 'var(--space-xl) var(--space-lg)' }}>
             <h1
               style={{
                 fontFamily: "'Playfair Display', Georgia, serif",
@@ -369,6 +404,7 @@ function App() {
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',
+                justifyContent: 'center',
                 gap: 'var(--space-md)',
                 fontSize: '0.875rem',
                 opacity: 0.9,
@@ -388,6 +424,18 @@ function App() {
             </div>
           </div>
         </header>
+
+        <Section title="Professional Experience">
+          {cv.experience.map((job, i) => (
+            <ExperienceCard
+              key={i}
+              period={job.period}
+              title={job.role}
+              subtitle={job.company}
+              highlights={job.highlights}
+            />
+          ))}
+        </Section>
 
         <Section title="Professional Summary">
           <p
@@ -579,18 +627,6 @@ function App() {
           </div>
         </Section>
 
-        <Section title="Professional Experience">
-          {cv.experience.map((job, i) => (
-            <ExperienceCard
-              key={i}
-              period={job.period}
-              title={job.role}
-              subtitle={job.company}
-              highlights={job.highlights}
-            />
-          ))}
-        </Section>
-
         <Section title="Education">
           {cv.education.map((edu, i) => (
             <div key={i} style={styles.card}>
@@ -615,6 +651,28 @@ function App() {
               </div>
             </div>
           ))}
+        </Section>
+
+        <Section title="Languages">
+          <div style={styles.card}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              {cv.languages.map((lang, i) => (
+                <span
+                  key={i}
+                  style={{
+                    fontSize: '0.9375rem',
+                    background: 'var(--color-accent-soft)',
+                    color: 'var(--color-accent)',
+                    padding: '0.5rem 1rem',
+                    borderRadius: 'var(--radius)',
+                    fontWeight: 600,
+                  }}
+                >
+                  {lang}
+                </span>
+              ))}
+            </div>
+          </div>
         </Section>
 
         <Section title="Referees">
